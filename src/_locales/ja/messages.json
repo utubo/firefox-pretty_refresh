@@ -1,0 +1,26 @@
+{
+  "extensionName": {
+    "message": "Pretty Refresh"
+  },
+  "extensionDescription": {
+    "message": "カスタマイズ可能な「プルダウンで更新」"
+  },
+  "Foreground": {
+    "message": "模様"
+  },
+  "Background": {
+    "message": "ベース"
+  },
+  "Shadow": {
+    "message": "影"
+  },
+  "Export___Import": {
+    "message": "設定のバックアップと復元"
+  },
+  "Export_settings_to_downloads_folder": {
+    "message": "設定を保存する"
+  },
+  "Import_settings_from_JSON" : {
+    "message": "バックアップから復元する"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "extensionName": {
+    "message": "Pretty Refresh"
+  },
+  "extensionDescription": {
+    "message": "Customizable pull-to-refresh instead of the built-in one"
+  },
+  "Foreground": {
+    "message": "Foreground"
+  },
+  "Background": {
+    "message": "Background"
+  },
+  "Shadow": {
+    "message": "Shadow"
+  },
+  "Export___Import": {
+    "message": "Export / Import"
+  },
+  "Export_settings_to_downloads_folder": {
+    "message": "Export settings to downloads folder"
+  },
+  "Import_settings_from_JSON": {
+    "message": "Import settings from JSON"
+  }
+}
+
