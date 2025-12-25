@@ -4,7 +4,7 @@
   --bg-color: #f9f9fa;
   --caption: #0c0c0d;
   --accent: #592acb;
-  --checked: #302962;
+  --selected: #654ea1;
   --secondery: #666;
   --third: #6666;
   --button: #cfcfd8;
@@ -165,7 +165,7 @@ textarea:selection, input:selection {
   border: 1px solid var(--fg-color);
 }
 .shape-selected {
-  background: var(--checked);
+  background: var(--selected);
 }
 
 /* dialog */
@@ -367,7 +367,7 @@ textarea:selection, input:selection {
     --bg-color: #2b2a33;
     --caption: #fbfbfecc;
     --accent: #cb9eff;
-    --checked: #cb9eff;
+    --selected: #a86ffa;
     --secondery: #fbfbfeaa;
     --third: #fbfbfe66;
     --button: #52525e;
