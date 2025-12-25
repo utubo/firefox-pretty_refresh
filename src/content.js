@@ -3,7 +3,7 @@
 var PrettyRefresh = {};
 PrettyRefresh.ini = {
   css: `
-    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle fill="%232525" cx="12" cy="12" r="12"/><path stroke="%23fbfbfe" fill="none" stroke-linecap="round" d="M15 14.5a4 4 0 1 1 1-2m-1.5-1l1.5 1.5 1.5-1.5"/></svg>');
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle fill="%52525e" cx="12" cy="12" r="12"/><path stroke="%23fbfbfe" fill="none" stroke-linecap="round" d="M15 14.5a4 4 0 1 1 1-2m-1.5-1l1.5 1.5 1.5-1.5"/></svg>');
     filter: drop-shadow(0 0 5px #0003);
     background-size: 48px 48px;
     height: 48px;
@@ -17,11 +17,10 @@ PrettyRefresh.ini = {
     z-index: 2147483647;
   `,
   bgshape: 'circle',
-  bgcolor: '#232525',
+  bgcolor: '#52525e',
   fgshape: 'default',
-  fgcolor: '#fbfbfe',
-  shsize: 3,
-  shcolor: '#000003',
+  shcolor: '#00000033',
+  shsize: 5,
   size: 48,
   delay: 300,
   version: 0,
