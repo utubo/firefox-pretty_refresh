@@ -24,6 +24,7 @@ PrettyRefresh.ini = {
   shsize: 5,
   size: 48,
   delay: 300,
+  effect: 'flash',
   version: 0,
 };
 const MARGIN_HIDE = 16;
@@ -91,7 +92,17 @@ const hide = () => {
 };
 
 const flash = () => {
-  setTranslate(MARGIN_SHOW / VV.scale, 0, 1.5, 0);
+  if (PrettyRefresh.ini.effect === 'rotate') {
+    icon.animate(
+      { transform: [
+        icon.style.transform + ' rotateZ(0deg)',
+        icon.style.transform + ' rotateZ(360deg)'
+      ] },
+      { iterations: Infinity, duration: 2000 }
+    );
+  } else {
+    setTranslate(MARGIN_SHOW / VV.scale, 0, 1.5, 0);
+  }
 }
 
 // touch-events ------
