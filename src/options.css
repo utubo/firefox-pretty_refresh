@@ -183,6 +183,7 @@ textarea:selection, input:selection {
   box-sizing: border-box;
   display: inline-block;
   height: 48px;
+  transition: .3s;
   width: 48px;
 }
 .shape-fg {
@@ -266,14 +267,16 @@ textarea:selection, input:selection {
   width: calc(20rem + 20px);
 }
 .color-tile {
+  border: 2px solid transparent;
   border-radius: 1rem;
   box-sizing: border-box;
   display: inline-block;
+  height: 4rem;
   margin: 4px;
   max-height: 15vw;
   max-width: 15vw;
+  transition: .3s;
   width: 4rem;
-  height: 4rem;
 }
 .color-tile-with-border {
   border: 1px solid var(--third);
