@@ -92,16 +92,27 @@ const hide = () => {
 };
 
 const flash = () => {
-  if (PrettyRefresh.ini.effect === 'rotate') {
-    icon.animate(
-      { transform: [
-        icon.style.transform + ' rotateZ(0deg)',
-        icon.style.transform + ' rotateZ(360deg)'
-      ] },
-      { iterations: Infinity, duration: 2000 }
-    );
-  } else {
-    setTranslate(MARGIN_SHOW / VV.scale, 0, 1.5, 0);
+  switch (PrettyRefresh.ini.effect) {
+    case 'rotate':
+      icon.animate(
+        { transform: [
+          icon.style.transform + ' rotateZ(0deg)',
+          icon.style.transform + ' rotateZ(360deg)'
+        ] },
+        { iterations: Infinity, duration: 2000 }
+      );
+      break;
+    case 'coin':
+      icon.animate(
+        { transform: [
+          icon.style.transform + ' rotateY(0deg)',
+          icon.style.transform + ' rotateY(360deg)'
+        ] },
+        { iterations: Infinity, duration: 1000 }
+      );
+      break;
+    default:
+      setTranslate(MARGIN_SHOW / VV.scale, 0, 1.5, 0);
   }
 }
 

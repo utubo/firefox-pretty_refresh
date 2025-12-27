@@ -23,6 +23,9 @@
   "Flash": {
     "message": "フラッシュ"
   },
+  "Coin": {
+    "message": "コイン"
+  },
   "Export___Import": {
     "message": "設定のバックアップと復元"
   },

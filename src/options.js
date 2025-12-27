@@ -101,8 +101,7 @@ const storageValue = async name => {
 const getMessage = (s) => {
   if (!s) return s;
   const key = s.replace(/[^0-9a-zA-Z_]/g, '_');
-  const msg = browser.i18n.getMessage(key);
-  return key === msg ? s : msg || s;
+  return browser.i18n.getMessage(key) || s;
 };
 
 const dataTargetId = e => e.target.getAttribute('data-targetId');
