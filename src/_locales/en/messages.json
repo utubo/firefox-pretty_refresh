@@ -26,6 +26,18 @@
   "Coin": {
     "message": "Coin"
   },
+  "Pull_Distance": {
+    "message": "Pull Distance"
+  },
+  "Short": {
+    "message": "Short"
+  },
+  "Middle": {
+    "message": "Middle"
+  },
+  "Long": {
+    "message": "Long"
+  },
   "Export___Import": {
     "message": "Export / Import"
   },

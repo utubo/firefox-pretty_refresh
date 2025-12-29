@@ -25,10 +25,10 @@ PrettyRefresh.ini = {
   size: 48,
   delay: 300,
   effect: 'flash',
+  distance: '24',
   version: 0,
 };
 const MARGIN_HIDE = 16;
-const MARGIN_SHOW = 24;
 const VV = window.visualViewport;
 
 // fields ------------
@@ -40,6 +40,7 @@ let sx = 0; // start X
 let sy = 0; // start Y
 let ly = 0; // last Y
 let strokeSize = 0;
+let distance = 24;
 
 // utilities ---------
 const getXY = e => {
@@ -84,7 +85,7 @@ const setTranslate = (top, deg, scale = 1, opacity = 1) => {
 const show = () => {
   createIcon();
   // icon.offsetHeight; // reflow for transition.
-  setTranslate(MARGIN_SHOW / VV.scale, 0);
+  setTranslate(distance / VV.scale, 0);
 };
 
 const hide = () => {
@@ -112,7 +113,7 @@ const flash = () => {
       );
       break;
     default:
-      setTranslate(MARGIN_SHOW / VV.scale, 0, 1.5, 0);
+      setTranslate(distance / VV.scale, 0, 1.5, 0);
   }
 }
 
@@ -127,7 +128,7 @@ const onPointerDown = e => {
   touchStartTime = Date.now();
   [sx, sy] = getXY(e);
   ly = sy;
-  strokeSize = (MARGIN_SHOW + PrettyRefresh.ini.size) / VV.scale;
+  strokeSize = (distance + PrettyRefresh.ini.size) / VV.scale;
 };
 
 const onTouchStart = e => {
@@ -189,6 +190,7 @@ PrettyRefresh.loadIni = async () => {
   const res = await browser.storage.local.get('pretty_refresh');
   if (res?.pretty_refresh) {
     Object.assign(PrettyRefresh.ini, res.pretty_refresh);
+    distance = PrettyRefresh.ini.distance|0;
   }
   if (icon) {
     applyCss();

@@ -26,6 +26,18 @@
   "Coin": {
     "message": "コイン"
   },
+  "Pull_Distance": {
+    "message": "指を動かす距離"
+  },
+  "Short": {
+    "message": "短め"
+  },
+  "Middle": {
+    "message": "標準"
+  },
+  "Long": {
+    "message": "長め"
+  },
   "Export___Import": {
     "message": "設定のバックアップと復元"
   },
