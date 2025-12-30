@@ -186,7 +186,7 @@ const cancel = () => {
   hide();
 };
 
-PrettyRefresh.reload = location.reload;
+PrettyRefresh.reload = () => { location.reload(); };
 
 PrettyRefresh.loadIni = async () => {
   const res = await browser.storage.local.get('pretty_refresh');
