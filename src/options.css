@@ -173,8 +173,11 @@ textarea:selection, input:selection {
 
 /* shape */
 .shapes {
-  display: flex;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 48px);
   gap: 16px;
+  justify-content: center;
   max-width: 100%;
   overflow: auto;
 }
@@ -182,16 +185,26 @@ textarea:selection, input:selection {
   background: var(--secondery);
   box-sizing: border-box;
   display: inline-block;
+  flex-shrink: 0;
   height: 48px;
+  mask-repeat: no-repeat;
   transition: .3s;
   width: 48px;
 }
 .shape-fg {
-  border-radius: 50%;
   border: 1px solid var(--fg-color);
 }
 .shape-selected {
   background: var(--selected);
+}
+.shape[data-shape-name="empty"] {
+  background: none;
+  border: 2px dotted var(--secondery);
+  border-radius: 50%;
+}
+.shape-selected[data-shape-name="empty"] {
+  background: none;
+  border-color: var(--selected);
 }
 
 /* dialog */
