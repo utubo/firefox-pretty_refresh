@@ -92,7 +92,7 @@ const hide = () => {
   setTranslate(- PrettyRefresh.ini.size - MARGIN_HIDE / VV.scale, -360);
 };
 
-const flash = () => {
+const animate = () => {
   switch (PrettyRefresh.ini.animation) {
     case 'rotate':
       icon.animate(
@@ -161,8 +161,8 @@ const onPointerMove = e => {
 const onPointerUp = () => {
   if (!isReady) return;
   if (PrettyRefresh.ini.delay < Date.now() - touchStartTime) {
-    flash();
-    location.reload();
+    animate();
+    PrettyRefresh.reload();
   } else {
     cancel();
   }
@@ -185,6 +185,8 @@ const cancel = () => {
   isReady = false;
   hide();
 };
+
+PrettyRefresh.reload = location.reload;
 
 PrettyRefresh.loadIni = async () => {
   const res = await browser.storage.local.get('pretty_refresh');

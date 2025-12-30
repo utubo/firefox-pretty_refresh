@@ -42,13 +42,14 @@ const SHAPES = {
     { name: 'star', svg: '<path fill="{bg}" d="M12 0l3.9 6.39 7.1 1.61-4.7 5.56 0.5 7.37-6.8-2.7-6.8 2.7 0.4-7.57-4.6-5.36 7-1.7z"/>' },
     { name: 'sakura', svg: '<path fill="{bg}" d="M12 3l1.1-2.42q3.74 3.74 2.53 6.82q2.31-1.43 7.26 0.44l-1.98 1.65 2.64 0.44q-2.42 4.18-5.61 4.95q2.42 2.42 1.65 7.04l-2.2-1.43 0.22 2.64q-3.19-0.22-5.61-3.63q-2.86 3.41-6.05 3.63l0.22-2.53-2.2 1.1q-1.32-3.3 1.54-6.82q-3.74-0.88-5.39-4.95l2.42-0.22-1.65-1.98q3.85-1.98 7.26-0.44q-0.66-2.75 2.64-6.82z"/>' },
     { name: 'fox', svg: '<path fill="{bg}" d="M12 5l6-5 2 8 4 6-12 7-12-7 4-6 2-8z"/>' },
-    { name: 'umbrella', svg: '<g fill="{bg}" transform="rotate(-30 12 12) translate(-0.2 0.5)"><path d="M1.5 15c-4-18 25-18 21 0q-3.5-2-7 0-3.5-2-7 0-3.5-2-7 0"/><circle cx="12" cy="1" r="1"/><path d="M11 13v7q0 4 4 4 4 0 4-4h-2q0 2-2 2-2 0-2-2v-7"/></g>' },
+    { name: 'umbrella', svg: '<g fill="{bg}" transform="rotate(-30 12 12) translate(0 3.3)"><path d="M1.5 15c-4-18 25-18 21 0q-3.5-2-7 0-3.5-2-7 0-3.5-2-7 0"/><circle cx="12" cy="1" r="1"/><path d="M11 12v7q0 4 4 4 4 0 4-4h-2q0 2-2 2-2 0-2-2v-7"/></g>' },
     { name: 'fish', svg: '<path fill="{bg}" d="M2 11.7l-1-0.7q8-4 19 1l3-2q-1 2.5 0 5l-3-2q-8 4-18.9-0.8z"/>' },
     { name: 'empty', svg: '' },
   ],
 };
 
 // fields ------------
+let initialized = false;
 let openedDlg;
 const dlgs = {};
 
@@ -200,7 +201,7 @@ const onChangeColorText = e => {
     const value = e.target.value || INSTEAD_OF_EMPTY[id];
     colorPreview(e.target).style.backgroundColor = value;
     saveBindingValues();
-  }, 500);
+  }, initialized ? 250 : 0);
 };
 
 // Shapes -------------------
@@ -455,6 +456,10 @@ const removeCover = () => {
   if (!cover) return;
   setTimeout(() => { fadeout(cover); });
   setTimeout(() => { cover.remove(); }, 500);
+  setTimeout(() => {
+    document.body.classList.add('initialized');
+    initialized = true;
+  }, 500);
 };
 
 // START HERE ! ------
@@ -465,6 +470,9 @@ const removeCover = () => {
   setupShapes();
   setupEventListeners();
   onPopState(history);
+  PrettyRefresh.reload = () => {
+    setTimeout(() => { location.reload(); }, 800);
+  };
   removeCover();
 })();
 

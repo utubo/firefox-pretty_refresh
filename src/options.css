@@ -124,8 +124,10 @@ textarea:selection, input:selection {
 .color-preview {
   display: inline-block;
   height: 100%;
-  transition: .2s;
   width: 100%;
+}
+.initialized .color-preview {
+  transition: .2s;
 }
 .color-text-input {
   display: inline-block;
