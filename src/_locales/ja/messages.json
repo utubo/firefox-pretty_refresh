@@ -38,6 +38,12 @@
   "Long": {
     "message": "長め"
   },
+  "save": {
+    "message": "保存"
+  },
+  "cancel": {
+    "message": "取消"
+  },
   "Export___Import": {
     "message": "設定のバックアップと復元"
   },

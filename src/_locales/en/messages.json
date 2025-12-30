@@ -38,6 +38,12 @@
   "Long": {
     "message": "Long"
   },
+  "save": {
+    "message": "Save"
+  },
+  "cancel": {
+    "message": "Cancel"
+  },
   "Export___Import": {
     "message": "Export / Import"
   },
