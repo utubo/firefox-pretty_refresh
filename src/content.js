@@ -24,7 +24,7 @@ PrettyRefresh.ini = {
   shsize: 5,
   size: 48,
   delay: 300,
-  effect: 'flash',
+  animation: 'flash',
   distance: '24',
   version: 0,
 };
@@ -93,7 +93,7 @@ const hide = () => {
 };
 
 const flash = () => {
-  switch (PrettyRefresh.ini.effect) {
+  switch (PrettyRefresh.ini.animation) {
     case 'rotate':
       icon.animate(
         { transform: [

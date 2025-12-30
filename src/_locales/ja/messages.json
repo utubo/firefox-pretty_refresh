@@ -14,8 +14,8 @@
   "Shadow": {
     "message": "影"
   },
-  "Effect": {
-    "message": "エフェクト"
+  "Animation": {
+    "message": "アニメーション"
   },
   "Rotate": {
     "message": "回転"
