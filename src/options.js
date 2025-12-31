@@ -26,6 +26,7 @@ const SHAPES = {
     { name: 'plus', svg: '<path stroke="{fg}" fill="none" d="M12 8v8m-4-4h8"/>' },
     { name: 'cross', svg: '<path stroke="{fg}" fill="none" d="M9 9l6 6m0-6l-6 6"/>' },
     { name: 'heart', svg: '<path stroke="{fg}" fill="none" d="M12 16c0 0 0 0 3-2.5s-1-6-3-2c-2-4-6-0.5-3 2c3 2.5 3 2.5 3 2.5z"/>' },
+    { name: 'flower', svg: '<path stroke="{fg}" fill="none" stroke-width="0.4" d="M12 12a2 2 0 1 0 0.01 0za2 2 0 1 0-0.01 0.2za2 2 0 1 0 0-0.01za2 2 0 1 0-0.6-0.1z"/>' },
     { name: 'star', svg: '<path stroke="{fg}" fill="none" d="M12 7.5 13.06 10.54 16.28 10.61 13.71 12.56 14.65 15.64 12 13.8 9.35 15.64 10.29 12.56 7.72 10.61 10.94 10.54z"/>' },
     { name: 'sakura', svg: '<path fill="{fg}" d="M12 8l0.5-1q1.2 1.4 1.1 2.8q1 -0.6 3 0.2l-0.8 0.7 1.1 0.2q-1 1.7-2.3 2q1 1 0.7 2.9l-0.9-0.6 0.1 1.1q-1.3-0.1-2.5-1.5q-1 1.3-2.5 1.5l0.1-1-0.9 0.4q-0.3-1.2 0.6-2.8q-1.3-0.5-2.2-2l1-0.1-0.7-0.8q1.6-0.8 3-0.2q-0.3-1 1.1-2.8z"/>' },
     { name: 'fox', svg: '<path fill="{fg}" d="M12 10l2-1.7 0.7 2.7 1.3 2-4 2.3-4-2.3 1.3-2 0.7-2.7z"/>' },
