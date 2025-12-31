@@ -271,8 +271,11 @@ const saveBindingValues = async () => {
     .replace('{bgshape}', getShapeCSS('bg'))
     .replace('{fgshape}', getShapeCSS('fg'))
     .replace('{shcolor}', PrettyRefresh.ini.shcolor)
-  await browser.storage.local.set({ 'pretty_refresh': PrettyRefresh.ini });
+  await saveIni();
   PrettyRefresh.loadIni();
+};
+const saveIni = async () => {
+  await browser.storage.local.set({ 'pretty_refresh': PrettyRefresh.ini });
 };
 const saveBindingValuesDelay = () => {
   resetTimer('saveBindingValues', saveBindingValues, 3000);
@@ -287,15 +290,7 @@ const importSetting = async text => {
   try {
     const obj = JSON.parse(text);
     Object.assign(PrettyRefresh.ini, obj.ini);
-    exData = obj.exData;
-    saveIni();
-    if (obj.customGestureDetails) {
-      for (const c of obj.customGestureDetails) {
-        const d = {};
-        d[c.id] = c.detail;
-        await browser.storage.local.set(d);
-      }
-    }
+    await saveIni();
     location.reload();
   } catch (e) {
     alert(e.message);
@@ -314,14 +309,7 @@ const importSettingOnChange = e => {
 const exportSetting = async () => {
   const data = {
     ini: PrettyRefresh.ini,
-    exData: exData,
-    customGestureDetails: []
   };
-  for (const c of exData.customGestureList) {
-    const id = `pretty_refresh_${c.id}`;
-    const detail = await storageValue(id);
-    data.customGestureDetails.push({ id: id, detail:detail });
-  }
   const href = 'data:application/octet-stream,' + encodeURIComponent(JSON.stringify(data));
   const link = byId('exportSettingLink');
   link.setAttribute('href', href);
@@ -350,6 +338,7 @@ const setupContents = () => {
     onChangeColorText({ target: elm });
   }
 };
+
 const setupEventListeners = () => {
   for (const elm of $bidingForms) {
     elm.addEventListener('change', saveBindingValues);
@@ -381,7 +370,6 @@ const setupEventListeners = () => {
     }
   });
 };
-
 
 // control Back button
 const changeState = state => {
