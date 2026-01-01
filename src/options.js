@@ -42,12 +42,12 @@ const SHAPES = {
     { name: 'hex', svg: '<path fill="{bg}" d="M24 12 18 22.4 6 22.4 0 12 6 1.6 18 1.6z"/>' },
     { name: 'heart', svg: '<path fill="{bg}" d="M12 22c0 0 0 0 8.5-8s-3-18-8.5-8c-6-10-17 0.5-8.5 8c8.5 8 8.5 8 8.5 8z"/>' },
     { name: 'squre', svg: '<path fill="{bg}" d="M12 0l12 12-12 12-12-12z"/>' },
-    { name: 'star', svg: '<path fill="{bg}" d="M12 0l3.9 6.39 7.1 1.61-4.7 5.56 0.5 7.37-6.8-2.7-6.8 2.7 0.4-7.57-4.6-5.36 7-1.7z"/>' },
+    { name: 'star', svg: '<path fill="{bg}" d="M12 0l3.9 6.39 7.1 1.61-4.7 5.56 0.5 7.37-6.8-2.7-6.8 2.7 0.4-7.57-4.6-5.36 7-1.7z"/>', y: 2 },
     { name: 'sakura', svg: '<path fill="{bg}" d="M12 2.5l1.045 -2.299q3.553 3.553 2.404 6.479q2.195 -1.359 6.897 0.418l-1.881 1.568l2.508 0.418q-2.299 3.971 -4.9 4.703q2.299 2.299 1.568 6.688l-2.09 -1.359l0.209 2.508q-3.031 -0.209 -5.8 -3.449q-2.717 3.24 -5.748 3.449l0.209 -2.404l-2.09 1.045q-1.254 -3.135 1.6 -6.479q-3.553 -0.836 -5.121 -4.703l2.299 -0.209l-1.568 -1.881q3.658 -1.881 6.897 -0.418q-0.627 -2.613 2.508 -6.479z"/>' },
-    { name: 'fox', svg: '<path fill="{bg}" d="M12 5l6-5 2 8 4 6-12 7-12-7 4-6 2-8z"/>' },
-    { name: 'rabbit', svg: '<path fill="{bg}" d="M2 14q0 5 10 5 10 0 10-5 0-3-3-5c4-12-7-11-5-1.5q-2-0.5-4 0c1-10-9-10-5 1.5q-3 1.5-3 5"/>' },
-    { name: 'bear', svg: '<path fill="{bg}" d="M2 14q1 5 10 5 9.5 0 10-5 0.5-4-2-6c5-6-7-9 -6-2q-2-0.5-4 0c1-7-11-4-6 2q-2.5 2-2 6"/>' },
-    { name: 'umbrella', svg: '<g fill="{bg}" transform="rotate(-30 12 12) translate(0 3.3)"><path d="M1.5 15c-4-18 25-18 21 0q-3.5-2-7 0-3.5-2-7 0-3.5-2-7 0"/><circle cx="12" cy="1" r="1"/><path d="M11 12v7q0 4 4 4 4 0 4-4h-2q0 2-2 2-2 0-2-2v-7"/></g>' },
+    { name: 'fox', svg: '<path fill="{bg}" d="M12 5l6-5 2 8 4 6-12 7-12-7 4-6 2-8z"/>', y: 3 },
+    { name: 'rabbit', svg: '<path fill="{bg}" d="M2 14q0 5 10 5 10 0 10-5 0-3-3-5c4-12-7-11-5-1.5q-2-0.5-4 0c1-10-9-10-5 1.5q-3 1.5-3 5"/>', y: 4 },
+    { name: 'bear', svg: '<path fill="{bg}" d="M2 14q1 5 10 5 9.5 0 10-5 0.5-4-2-6c5-6-7-9 -6-2q-2-0.5-4 0c1-7-11-4-6 2q-2.5 2-2 6"/>', y: 4 },
+    { name: 'umbrella', svg: '<g fill="{bg}" transform="rotate(-30 12 12) translate(0 3.5)"><path d="M1.5 15c-4-18 25-18 21 0q-3.5-2-7 0-3.5-2-7 0-3.5-2-7 0"/><circle cx="12" cy="1" r="1"/><path d="M11 11.5v7q0 4 4 4 4 0 4-4h-2q0 2-2 2-2 0-2-2v-7"/></g>', y: -2 },
     { name: 'fish', svg: '<path fill="{bg}" d="M2 11.7l-1-0.7q8-4 19 1l3-2q-1 2.5 0 5l-3-2q-8 4-18.9-0.8z"/>' },
     { name: 'empty', svg: '' },
   ],
@@ -220,6 +220,7 @@ const setupShapes = () => {
       const svg = s.svg.replace(`{${fgbg}}`, 'black');
       if (svg) {
         item.style.maskImage = `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">${svg}</svg>')`;
+        item.style.translate = `0 ${s.y || 0}px`;
       }
       f.appendChild(item);
     }
