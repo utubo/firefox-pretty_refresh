@@ -4,9 +4,8 @@
   --bg-color: #f9f9fa;
   --accent: #592acb;
   --checked: #302962;
-  --selected: #654ea1;
   --checkbox-bg: #bebec1;
-  --selected-bg: #c6c4d4;
+  --checked-bg: #c6c4d4;
   --secondery: #666;
   --third: #d7d7db;
   --button: #cfcfd8;
@@ -207,10 +206,10 @@ textarea:selection, input:selection {
   }
   &:has(.checkbox:checked) {
     &::before {
-      background: var(--selected-bg);
+      background: var(--checked-bg);
     }
     &::after {
-      background: var(--selected);
+      background: var(--checked);
       transform: translateX(0);
     }
   }
@@ -243,7 +242,7 @@ textarea:selection, input:selection {
   border: 1px solid var(--fg-color);
 }
 .shape-selected {
-  background: var(--selected);
+  background: var(--checked);
 }
 .shape[data-shape-name="empty"] {
   background: none;
@@ -252,7 +251,7 @@ textarea:selection, input:selection {
 }
 .shape-selected[data-shape-name="empty"] {
   background: none;
-  border-color: var(--selected);
+  border-color: var(--checked);
 }
 
 /* dialog */
@@ -456,10 +455,9 @@ textarea:selection, input:selection {
     --bg-color: #2b2a33;
     --caption: #fbfbfecc;
     --accent: #cb9eff;
-    --checked: #cb9eff;
-    --selected: #a86ffa;
+    --checked: #a86ffa;
     --checkbox-bg: #6a6971;
-    --selected-bg: #523f71;
+    --checked-bg: #523f71;
     --secondery: #fbfbfeaa;
     --third: #fbfbfe66;
     --button: #52525e;
