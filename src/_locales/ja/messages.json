@@ -38,6 +38,12 @@
   "Long": {
     "message": "長め"
   },
+  "Others": {
+    "message": "その他"
+  },
+  "pageBottom": {
+    "message": "ページ下端で上に引っ張って更新"
+  },
   "save": {
     "message": "保存"
   },

@@ -38,6 +38,12 @@
   "Long": {
     "message": "Long"
   },
+  "Others": {
+    "message": "Others"
+  },
+  "pageBottom": {
+    "message": "Enable bottom pull-refresh"
+  },
   "save": {
     "message": "Save"
   },

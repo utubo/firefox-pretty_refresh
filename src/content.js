@@ -26,19 +26,25 @@ PrettyRefresh.ini = {
   delay: 300,
   animation: 'flash',
   distance: '24',
+  pageBottom: false,
   version: 0,
 };
 const MARGIN_HIDE = 16;
 const VV = window.visualViewport;
+const POS_TOP = 1;
+const POS_BOTTOM = -1;
 
 // fields ------------
 let icon = null;
+let icons = [null, null];
 let isActive = false;
 let isReady = false;
 let touchStartTime = 0;
 let sx = 0; // start X
 let sy = 0; // start Y
 let ly = 0; // last Y
+let dy = 0; // delta Y
+let pos = 1;
 let strokeSize = 0;
 let distance = 24;
 
@@ -48,22 +54,23 @@ const getXY = e => {
   return [t.pageX, t.pageY];
 };
 
-const isElementScrolled = e => {
-  return e?.scrollTop || e && isElementScrolled(e.parentNode);
-}
-
-
 // icon --------------
 const createIcon = () => {
+  const idx = pos + 1;
+  icon = icons[idx];
   if (icon) return;
   icon = document.createElement('DIV');
   applyCss();
-  hide();
   document.body.appendChild(icon);
+  icons[idx] = icon;
 };
 
 const applyCss = () => {
   icon.style.cssText = PrettyRefresh.ini.css;
+  if (pos === POS_BOTTOM) {
+    icon.style.top = '';
+    icon.style.bottom = '0';
+  }
   hide();
 };
 
@@ -85,11 +92,12 @@ const setTranslate = (top, deg, scale = 1, opacity = 1) => {
 const show = () => {
   createIcon();
   // icon.offsetHeight; // reflow for transition.
-  setTranslate(distance / VV.scale, 0);
+  setTranslate(pos * distance / VV.scale, 0);
 };
 
 const hide = () => {
-  setTranslate(- PrettyRefresh.ini.size - MARGIN_HIDE / VV.scale, -360);
+  const a = PrettyRefresh.ini.size + MARGIN_HIDE / VV.scale;
+  setTranslate(-pos * a, -360);
 };
 
 const animate = () => {
@@ -113,21 +121,18 @@ const animate = () => {
       );
       break;
     default:
-      setTranslate(distance / VV.scale, 0, 1.5, 0);
+      setTranslate(pos * distance / VV.scale, 0, 1.5, 0);
   }
 }
 
 // touch-events ------
 const onPointerDown = e => {
   isReady = false;
-  isActive = isValid(e);
-  if (!isActive) {
-    cancel();
-    return;
-  }
+  isActive = true;
   touchStartTime = Date.now();
   [sx, sy] = getXY(e);
   ly = sy;
+  dy = 0;
   strokeSize = (distance + PrettyRefresh.ini.size) / VV.scale;
 };
 
@@ -142,17 +147,19 @@ const onTouchStart = e => {
 const onPointerMove = e => {
   if (!isActive) return;
   const [x, y] = getXY(e);
-  if (y < ly) {
+  if (y < ly && 0 < dy || ly < y && dy < 0) {
+    cancel();
+    return;
+  }
+  const dx = x - sx;
+  if (dx < -strokeSize || strokeSize < dx) {
     cancel();
     return;
   }
   ly = y
-  const dx = x - sx;
-  if (dx < - strokeSize || strokeSize < dx) {
-    cancel();
-    return;
-  }
-  if (strokeSize < y - sy) {
+  dy = y - sy;
+  if (strokeSize < dy || dy < -strokeSize && PrettyRefresh.ini.pageBottom) {
+    pos = 0 < dy ? POS_TOP : POS_BOTTOM;
     show();
     isReady = true;
   }
@@ -169,17 +176,11 @@ const onPointerUp = () => {
 };
 
 const onScroll = () => {
+  if (!isActive) return;
   cancel();
 }
 
 // control -----------
-const isValid = e => {
-  return !VV.offsetTop &&
-    !document.documentElement.scrollTop &&
-    !document.body.scrollTop &&
-    !isElementScrolled(e.target)
-};
-
 const cancel = () => {
   isActive = false;
   isReady = false;

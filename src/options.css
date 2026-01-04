@@ -5,6 +5,8 @@
   --accent: #592acb;
   --checked: #302962;
   --selected: #654ea1;
+  --checkbox-bg: #bebec1;
+  --selected-bg: #c6c4d4;
   --secondery: #666;
   --third: #d7d7db;
   --button: #cfcfd8;
@@ -168,6 +170,50 @@ textarea:selection, input:selection {
   height: .6em;
   margin: .3em;
   width: .6em;
+}
+.checkbox {
+  display: none;
+}
+.checkbox-label {
+  cursor: pointer;
+  display: block;
+  position: relative;
+  transition: .2s;
+  &::before {
+    background: var(--checkbox-bg);
+    border-radius: .4rem;
+    content: '';
+    display: inline-block;
+    height: .8rem;
+    position: absolute;
+    right: 0;
+    top: calc(50% - .4rem);
+    transition: .3s;
+    width: 2rem;
+  }
+  &::after {
+    background: #e4e4e4;
+    border-radius: 50%;
+    box-shadow: 0 2px 2px #0004;
+    content: '';
+    display: inline-block;
+    height: 1.2rem;
+    position: absolute;
+    right: 0;
+    top: calc(50% - .6rem);
+    transform: translateX(-1rem);
+    transition: .3s;
+    width: 1.2rem;
+  }
+  &:has(.checkbox:checked) {
+    &::before {
+      background: var(--selected-bg);
+    }
+    &::after {
+      background: var(--selected);
+      transform: translateX(0);
+    }
+  }
 }
 .editing {
   color: #3cf !important;
@@ -412,6 +458,8 @@ textarea:selection, input:selection {
     --accent: #cb9eff;
     --checked: #cb9eff;
     --selected: #a86ffa;
+    --checkbox-bg: #6a6971;
+    --selected-bg: #523f71;
     --secondery: #fbfbfeaa;
     --third: #fbfbfe66;
     --button: #52525e;
