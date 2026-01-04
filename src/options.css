@@ -6,7 +6,7 @@
   --checked: #302962;
   --checkbox-bg: #bebec1;
   --checked-bg: #c6c4d4;
-  --secondery: #666;
+  --secondery: #5b5b66;
   --third: #d7d7db;
   --button: #cfcfd8;
   --submit: #302962;
@@ -229,7 +229,7 @@ textarea:selection, input:selection {
   overflow: auto;
 }
 .shape {
-  background: var(--secondery);
+  background: var(--button);
   box-sizing: border-box;
   display: inline-block;
   flex-shrink: 0;
@@ -246,7 +246,7 @@ textarea:selection, input:selection {
 }
 .shape[data-shape-name="empty"] {
   background: none;
-  border: 2px dotted var(--secondery);
+  border: 2px dotted var(--button);
   border-radius: 50%;
 }
 .shape-selected[data-shape-name="empty"] {
@@ -458,7 +458,7 @@ textarea:selection, input:selection {
     --checked: #a86ffa;
     --checkbox-bg: #6a6971;
     --checked-bg: #523f71;
-    --secondery: #fbfbfeaa;
+    --secondery: #cfcfd8;
     --third: #fbfbfe66;
     --button: #52525e;
     --submit: #7542e5;
