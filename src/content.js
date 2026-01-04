@@ -44,6 +44,7 @@ let sx = 0; // start X
 let sy = 0; // start Y
 let ly = 0; // last Y
 let dy = 0; // delta Y
+let scrollY = 0;
 let pos = 1;
 let strokeSize = 0;
 let distance = 24;
@@ -53,6 +54,10 @@ const getXY = e => {
   const t = e.touches[0];
   return [t.pageX, t.pageY];
 };
+
+const getScrollY = e => {
+  return e?.scrollTop || e && getScrollY(e.parentNode);
+}
 
 // icon --------------
 const createIcon = () => {
@@ -133,6 +138,7 @@ const onPointerDown = e => {
   [sx, sy] = getXY(e);
   ly = sy;
   dy = 0;
+  scrollY = getScrollY(e.target);
   strokeSize = (distance + PrettyRefresh.ini.size) / VV.scale;
 };
 
@@ -147,18 +153,25 @@ const onTouchStart = e => {
 const onPointerMove = e => {
   if (!isActive) return;
   const [x, y] = getXY(e);
-  if (y < ly && 0 < dy || ly < y && dy < 0) {
+  if (strokeSize < Math.abs(x - sx)) {
     cancel();
     return;
   }
-  const dx = x - sx;
-  if (dx < -strokeSize || strokeSize < dx) {
+  if (y < ly && 0 < dy || ly < y && dy < 0) {
     cancel();
     return;
   }
   ly = y
   dy = y - sy;
-  if (strokeSize < dy || dy < -strokeSize && PrettyRefresh.ini.pageBottom) {
+  if (dy < 0 && !PrettyRefresh.ini.pageBottom)  {
+    cancel();
+    return;
+  }
+  if (scrollY !== getScrollY(e.target)) {
+    cancel();
+    return;
+  }
+  if (strokeSize < Math.abs(dy)) {
     pos = 0 < dy ? POS_TOP : POS_BOTTOM;
     show();
     isReady = true;
