@@ -24,7 +24,7 @@ PrettyRefresh.ini = {
   shsize: 5,
   size: 48,
   delay: 300,
-  animation: 'flash',
+  animation: 'rotate',
   distance: '24',
   pageBottom: false,
   version: 0,
