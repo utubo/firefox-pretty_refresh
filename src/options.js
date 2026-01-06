@@ -1,7 +1,6 @@
 'use strict';
 
 // const -------------
-const manifest = browser.runtime.getManifest()
 const INSTEAD_OF_EMPTY = {
 };
 const TIMERS = {};
