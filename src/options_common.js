@@ -8,8 +8,8 @@ const dlgs = {};
 // fields ------------
 const settings = {
   storageKey: '',
-  insteadOfEmpty: {},
   getIni: () => ({}),
+  insteadOfEmpty: {},
   onInitialize: NOP,
   onSavePre: NOP,
   onSaveComplete: NOP,
