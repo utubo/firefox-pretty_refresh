@@ -3,6 +3,7 @@
 // const -------------
 const TIMERS = {};
 const NOP = () => {};
+const ASYNC_NOP = async () => {};
 const dlgs = {};
 
 // fields ------------
@@ -10,9 +11,9 @@ const settings = {
   storageKey: '',
   getIni: () => ({}),
   insteadOfEmpty: {},
-  onInitialize: NOP,
-  onSavePre: NOP,
-  onSaveComplete: NOP,
+  onInitialize: ASYNC_NOP,
+  onSavePre: ASYNC_NOP,
+  onSaveComplete: ASYNC_NOP,
 }
 let initialized = false;
 let openedDlg;
