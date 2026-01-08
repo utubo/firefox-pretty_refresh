@@ -9,10 +9,10 @@ const dlgs = {};
 const settings = {
   storageKey: '',
   insteadOfEmpty: {},
+  getIni: () => ({}),
   onInitialize: NOP,
   onSavePre: NOP,
   onSaveComplete: NOP,
-  getIni: () => ({}),
 }
 let initialized = false;
 let openedDlg;
