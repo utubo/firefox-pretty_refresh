@@ -98,19 +98,19 @@ const getShapeCSS = (fgbg) => {
 const mySettings = {
   storageKey: 'pretty_refresh',
   getIni: () => PrettyRefresh.ini,
-  onInitialize: () => {
+  onInitialize() {
     setupShapes();
     PrettyRefresh.reload = () => {
       setTimeout(() => { location.reload(); }, 800);
     };
   },
-  onSavePre: () => {
+  onSavePre() {
     PrettyRefresh.ini.css = CSS_TEMPLATE
       .replace('{bgshape}', getShapeCSS('bg'))
       .replace('{fgshape}', getShapeCSS('fg'))
       .replace('{shcolor}', PrettyRefresh.ini.shcolor)
   },
-  onSaveComplete: () => {
+  onSaveComplete() {
     PrettyRefresh.loadIni();
   },
 };
