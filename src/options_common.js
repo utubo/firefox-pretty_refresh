@@ -127,7 +127,7 @@ const hex = d => Number(d).toString(16).padStart(2, '0');
 dlgs.colorDlg = {
   targetId: null,
   rgb: null,
-  setRGB: rgb => {
+  setRGB(rgb) {
     dlgs.colorDlg.rgb = rgb;
     byId('sliderA').style.background =
       `linear-gradient(to right, transparent, ${rgb})`;
@@ -139,7 +139,7 @@ dlgs.colorDlg = {
       );
     }
   },
-  onShow: id => {
+  onShow(id) {
     dlgs.colorDlg.targetId = id;
     const elm = byId(id);
     const a = byId('sliderA');
@@ -152,13 +152,13 @@ dlgs.colorDlg = {
     });
   },
   onHide: NOP,
-  onSubmit: () => {
+  onSubmit() {
     const a = Number(byId('sliderA').value) || 0;
     const t = byId(dlgs.colorDlg.targetId);
     t.value = dlgs.colorDlg.rgb + (a !== 255 ? hex(a) : '');
     onChangeColorText({ target: t });
   },
-  init: () => {
+  init() {
     const f = document.createDocumentFragment();
     for (const c of [
       '#a4c639', // android green
