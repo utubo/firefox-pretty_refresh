@@ -202,6 +202,65 @@ const onChangeColorText = e => {
   }, initialized ? 250 : 0);
 };
 
+// Deny list ----------------
+dlgs.denylistDlg = {
+  template: byClass(document, 'denylist-item'),
+  newItem() {
+    return dlgs.denylistDlg.template.cloneNode(true);
+  },
+  onShow() {
+    const denylist = byId('denylist');
+    const newList = denylist.cloneNode(false);
+    for (const urlPattern of settings.getIni().denylist ?? []) {
+      const item = dlgs.denylistDlg.newItem();
+      byClass(item, 'denylist-input').value = urlPattern.url;
+      newList.appendChild(item);
+    }
+    const newItem = dlgs.denylistDlg.newItem();
+    newList.appendChild(newItem);
+    denylist.parentNode.replaceChild(newList, denylist);
+  },
+  onHide: NOP,
+  onSubmit() {
+    const list = [];
+    for (const input of allByClass('denylist-input')) {
+      if (!input.value) continue;
+      list.push({url: input.value});
+    }
+    settings.getIni().denylist = list;
+    saveIni();
+    setupDenylistSummary();
+  },
+  init() {
+    addEventListener('input', e => {
+      if (!e.target.classList.contains('denylist-input')) return;
+      if (e.target.parentNode.nextSibling) return;
+      byId('denylist').appendChild(dlgs.denylistDlg.newItem());
+    });
+    addEventListener('click', e => {
+      if (!e.target.classList.contains('delete-denylist')) return;
+      const denylistItem = parentByClass(e.target, 'denylist-item');
+      byClass(denylistItem, 'denylist-input').value = '';
+      if (!denylistItem.nextSibling) return;
+      denylistItem.remove();
+    });
+  },
+};
+const setupDenylistSummary = () => {
+  const sum = byId('denylistSummary');
+  if (!sum) return;
+  let count = 0;
+  const urls = [];
+  for (const item of (settings.getIni().denylist || [])) {
+    urls.push(item.url);
+    if (5 < ++count) {
+      urls.push('...');
+      break;
+    }
+  }
+  sum.textContent = count ? urls.join(', ') : getMessage('None');
+};
+
 // Save ---------------------
 const saveBindingValues = async () => {
   clearTimeout(TIMERS.saveBindingValues);
@@ -287,6 +346,7 @@ const setupContents = () => {
     elm.setAttribute('placeholder', settings.insteadOfEmpty[elm.id]);
     onChangeColorText({ target: elm });
   }
+  setupDenylistSummary();
 };
 
 const setupEventListeners = () => {
@@ -300,8 +360,9 @@ const setupEventListeners = () => {
       changeState({dlg: 'colorDlg', targetId: dataTargetId(e)});
     });
   }
-  byId('importSetting').addEventListener('change', importSettingOnChange);
-  byId('exportSetting').addEventListener('click', exportSetting);
+  byId('importSetting')?.addEventListener('change', importSettingOnChange);
+  byId('exportSetting')?.addEventListener('click', exportSetting);
+  byId('denylistEdit')?.addEventListener('click', () => { changeState({dlg: 'denylistDlg'}); });
 
   // common events
   addEventListener('click', e => {
