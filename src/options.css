@@ -33,3 +33,18 @@
   border-color: var(--checked);
 }
 
+#denylistDlg > .dlg-container {
+  width: 100%;
+}
+.denylist-item {
+  margin-bottom: .5em;
+}
+.denylist-input {
+  margin-right: .5em;
+  vertical-align: middle;
+  width: calc(100% - 3.5em);
+}
+.denylist-item:last-child .delete-denylist {
+  opacity: .3;
+}
+

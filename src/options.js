@@ -94,12 +94,75 @@ const getShapeCSS = (fgbg) => {
   return s.svg.replace(`{${fgbg}}`, PrettyRefresh.ini[`${fgbg}color`].replace('#', '%23'));
 };
 
-// START HERE ! ------
+// Deny list ----------------
+const setupDenylistSummary = () => {
+  let count = 0;
+  const urls = [];
+  for (const item of (PrettyRefresh.ini.denylist || [])) {
+    urls.push(item.url);
+    if (5 < ++count) {
+      urls.push('...');
+      break;
+    }
+  }
+  byId('denylistSummary').textContent = count ? urls.join(', ') : getMessage('None');
+};
+dlgs.denylistDlg = {
+  template: byClass(document, 'denylist-item'),
+  newItem() {
+    return dlgs.denylistDlg.template.cloneNode(true);
+  },
+  onShow() {
+    const denylist = byId('denylist');
+    const newList = denylist.cloneNode(false);
+    if (PrettyRefresh.ini.denylist) {
+      for (const urlPattern of PrettyRefresh.ini.denylist) {
+        const item = dlgs.denylistDlg.newItem();
+        byClass(item, 'denylist-input').value = urlPattern.url;
+        newList.appendChild(item);
+      }
+    }
+    const newItem = dlgs.denylistDlg.newItem();
+    newList.appendChild(newItem);
+    denylist.parentNode.replaceChild(newList, denylist);
+  },
+  onHide: NOP,
+  onSubmit() {
+    const list = [];
+    for (const input of allByClass('denylist-input')) {
+      if (!input.value) continue;
+      list.push({url: input.value});
+    }
+    PrettyRefresh.ini.denylist = list;
+    saveIni();
+    setupDenylistSummary();
+  },
+  init() {
+    addEventListener('input', e => {
+      if (!e.target.classList.contains('denylist-input')) return;
+      if (e.target.parentNode.nextSibling) return;
+      byId('denylist').appendChild(dlgs.denylistDlg.newItem());
+    });
+    addEventListener('click', e => {
+      if (!e.target.classList.contains('delete-denylist')) return;
+      const denylistItem = parentByClass(e.target, 'denylist-item');
+      byClass(denylistItem, 'denylist-input').value = '';
+      if (!denylistItem.nextSibling) return;
+      denylistItem.remove();
+    });
+  },
+};
+byId('denylistEdit').addEventListener('click', () => {
+  changeState({dlg: 'denylistDlg'});
+});
+
+// START HERE ! -------------
 const mySettings = {
   storageKey: 'pretty_refresh',
   getIni: () => PrettyRefresh.ini,
   onInitialize() {
     setupShapes();
+    setupDenylistSummary();
     PrettyRefresh.reload = () => {
       setTimeout(() => { location.reload(); }, 800);
     };

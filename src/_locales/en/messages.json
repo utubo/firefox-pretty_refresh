@@ -44,6 +44,12 @@
   "pageBottom": {
     "message": "Enable bottom pull-refresh"
   },
+  "Denylist": {
+    "message": "Deny list"
+  },
+  "None": {
+    "message": "None"
+  },
   "save": {
     "message": "Save"
   },

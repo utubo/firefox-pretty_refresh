@@ -392,6 +392,13 @@ input[type="checkbox"] {
 .icon-import::before {
   mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" stroke="black" stroke-width="1" fill="none" stroke-linejoin="round"><path d="M4.5 10v4h9v-12h-9v4M2 8h7"/><path fill="black" d="M7 8v-2l2 2-2 2z"/></svg>');
 }
+.icon-delete {
+  color:var(--red);
+}
+.icon-delete::before {
+  background: var(--red);
+  mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" stroke="black" stroke-width="1" fill="none"><path d="M2 4h12M4 4v9q0 1 1 1h6q1 0 1-1v-9M6.5 6v6M9.5 6v6M6 4q0 -2 2-2 2 0 2 2"/></svg>');
+}
 
 @media (prefers-color-scheme: dark) {
   :root {

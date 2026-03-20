@@ -44,6 +44,12 @@
   "pageBottom": {
     "message": "ページ下端で上に引っ張って更新"
   },
+  "Denylist": {
+    "message": "無効URL"
+  },
+  "None": {
+    "message": "無し"
+  },
   "save": {
     "message": "保存"
   },

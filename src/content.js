@@ -27,6 +27,7 @@ PrettyRefresh.ini = {
   animation: 'rotate',
   distance: '24',
   pageBottom: false,
+  denylist: [],
   version: 0,
 };
 const MARGIN_HIDE = 16;
@@ -214,11 +215,16 @@ PrettyRefresh.loadIni = async () => {
 };
 
 // START HERE ! ------
-// NOTE: pointermove does not work the scale is not 1.0.
-addEventListener('touchstart', onTouchStart);
-addEventListener('touchmove', onPointerMove);
-addEventListener('touchend', onPointerUp);
-addEventListener('scroll', onScroll);
-VV.addEventListener('scroll', onScroll);
-PrettyRefresh.loadIni();
+(async () => {
+  await PrettyRefresh.loadIni();
+  for (const d of PrettyRefresh.ini.denylist) {
+    if (location.href.startsWith(d.url)) return;
+  }
+  // NOTE: pointermove does not work the scale is not 1.0.
+  addEventListener('touchstart', onTouchStart);
+  addEventListener('touchmove', onPointerMove);
+  addEventListener('touchend', onPointerUp);
+  addEventListener('scroll', onScroll);
+  VV.addEventListener('scroll', onScroll);
+})();
 
