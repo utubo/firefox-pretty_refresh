@@ -5,6 +5,7 @@ const TIMERS = {};
 const NOP = () => {};
 const ASYNC_NOP = async () => {};
 const dlgs = {};
+const comp = {};
 
 // fields ------------
 const settings = {
@@ -105,13 +106,7 @@ const onPopState = e => {
     // enable touch scroll.
     document.body.style.overflow = null;
   } else if (state.dlg) {
-    const d = dlgs[state.dlg];
-    const i = d.init;
-    if (i) {
-      i();
-      d.init = null;
-    }
-    d.onShow(state.targetId);
+    dlgs[state.dlg].onShow(state.targetId);
     openedDlg = byId(state.dlg);
     fadein(openedDlg);
     // prevent touch scroll.
@@ -123,10 +118,12 @@ const onPopState = e => {
 window.addEventListener('popstate', onPopState);
 
 // Color dialog -------------
-const hex = d => Number(d).toString(16).padStart(2, '0');
 dlgs.colorDlg = {
   targetId: null,
   rgb: null,
+  hex(d) {
+    return Number(d).toString(16).padStart(2, '0');
+  },
   setRGB(rgb) {
     dlgs.colorDlg.rgb = rgb;
     byId('sliderA').style.background =
@@ -139,6 +136,9 @@ dlgs.colorDlg = {
       );
     }
   },
+  getPreview(i) {
+    return byClass(i.parentNode, 'color-preview');
+  },
   onShow(id) {
     dlgs.colorDlg.targetId = id;
     const elm = byId(id);
@@ -147,6 +147,7 @@ dlgs.colorDlg = {
     requestAnimationFrame(() => {
       const rgba = getComputedStyle(a).color.match(/[0-9.]+/g);
       a.value = rgba.length === 4 ? Math.round(Number(rgba[3]) * 255) : 255;
+      const hex = dlgs.colorDlg.hex;
       const hexRGB = `#${hex(rgba[0])}${hex(rgba[1])}${hex(rgba[2])}`;
       dlgs.colorDlg.setRGB(hexRGB);
     });
@@ -155,10 +156,22 @@ dlgs.colorDlg = {
   onSubmit() {
     const a = Number(byId('sliderA').value) || 0;
     const t = byId(dlgs.colorDlg.targetId);
-    t.value = dlgs.colorDlg.rgb + (a !== 255 ? hex(a) : '');
-    onChangeColorText({ target: t });
+    t.value = dlgs.colorDlg.rgb + (a !== 255 ? dlgs.colorDlg.hex(a) : '');
+    onInputText({ target: t });
+  },
+  onInputText(e) {
+    const id = e.target.id;
+    resetTimer(`onchangecolortext_${id}`, () => {
+      const value = e.target.value || settings.insteadOfEmpty[id];
+      dlgs.colorDlg.getPreview(e.target).style.backgroundColor = value;
+      saveBindingValues();
+    }, initialized ? 250 : 0);
+  },
+  onClickPreview(e) {
+    changeState({dlg: 'colorDlg', targetId: dataTargetId(e)});
   },
   init() {
+    // pallet
     const f = document.createDocumentFragment();
     for (const c of [
       '#a4c639', // android green
@@ -177,7 +190,7 @@ dlgs.colorDlg = {
       t.className = 'color-tile';
       t.style.background = c;
       t.setAttribute('data-c', c);
-      // only white and black have border.
+      // only white, gray and black have border.
       if (c === '#f9f9fa' || c === '#52525e' || c === '#23222b') {
         t.className += ' color-tile-with-border'
       }
@@ -190,16 +203,14 @@ dlgs.colorDlg = {
       const v = e.target.getAttribute('data-c');
       dlgs.colorDlg.setRGB(v);
     });
+    // preview and text
+    for (const elm of allByClass('color-text-input')) {
+      elm.setAttribute('placeholder', settings.insteadOfEmpty[elm.id]);
+      dlgs.colorDlg.onInputText({ target: elm });
+      elm.addEventListener('input', dlgs.colorDlg.onInputText);
+      dlgs.colorDlg.getPreview(elm).addEventListener('click', dlgs.colorDlg.onClickPreview);
+    }
   },
-};
-const colorPreview = i => byClass(i.parentNode, 'color-preview');
-const onChangeColorText = e => {
-  const id = e.target.id;
-  resetTimer(`onchangecolortext_${id}`, () => {
-    const value = e.target.value || settings.insteadOfEmpty[id];
-    colorPreview(e.target).style.backgroundColor = value;
-    saveBindingValues();
-  }, initialized ? 250 : 0);
 };
 
 // Deny list ----------------
@@ -229,7 +240,21 @@ dlgs.denylistDlg = {
     }
     settings.getIni().denylist = list;
     saveIni();
-    setupDenylistSummary();
+    dlgs.denylistDlg.updateSummary();
+  },
+  updateSummary() {
+    const sum = byId('denylistSummary');
+    if (!sum) return;
+    let count = 0;
+    const urls = [];
+    for (const item of (settings.getIni().denylist || [])) {
+      urls.push(item.url);
+      if (5 < ++count) {
+        urls.push('...');
+        break;
+      }
+    }
+    sum.textContent = count ? urls.join(', ') : getMessage('None');
   },
   init() {
     addEventListener('input', e => {
@@ -244,21 +269,102 @@ dlgs.denylistDlg = {
       if (!denylistItem.nextSibling) return;
       denylistItem.remove();
     });
+    byId('denylistEdit')?.addEventListener('click', () => { changeState({dlg: 'denylistDlg'}); });
+    dlgs.denylistDlg.updateSummary();
   },
 };
-const setupDenylistSummary = () => {
-  const sum = byId('denylistSummary');
-  if (!sum) return;
-  let count = 0;
-  const urls = [];
-  for (const item of (settings.getIni().denylist || [])) {
-    urls.push(item.url);
-    if (5 < ++count) {
-      urls.push('...');
-      break;
+
+// Import / Export ----------
+comp.importExport = {
+  init() {
+    byId('importSetting')?.addEventListener('change', comp.importExport.onFileSelect);
+    byId('exportSetting')?.addEventListener('click', comp.importExport.export);
+  },
+  async import(json) {
+    try {
+      const obj = JSON.parse(json);
+      Object.assign(settings.getIni(), obj.ini);
+      await saveIni();
+      location.reload();
+    } catch (e) {
+      alert(e.message);
     }
-  }
-  sum.textContent = count ? urls.join(', ') : getMessage('None');
+  },
+  async export() {
+    const data = { ini: settings.getIni() };
+    const href = 'data:application/octet-stream,' + encodeURIComponent(JSON.stringify(data));
+    const link = byId('exportSettingLink');
+    link.setAttribute('href', href);
+    link.click();
+  },
+  onFileSelect(e) {
+    try {
+      if (!e.target.files[0]) return;
+      const reader = new FileReader();
+      reader.onload = () => { comp.importExport.import(reader.result); };
+      reader.readAsText(e.target.files[0]);
+    } catch (error) {
+      alert(error.message);
+    }
+  },
+};
+
+// Others ------------------
+comp.common = {
+  init() {
+    comp.common.setupContents();
+    comp.common.setupEventListeners();
+  },
+  setupContents() {
+    for (const caption of allByClass('i18n')) {
+      caption.textContent = getMessage(caption.textContent);
+    }
+    const ini = settings.getIni();
+    for (const elm of $bidingForms) {
+      if (elm.type === 'checkbox') {
+        elm.checked = !!ini[elm.id];
+      } else if (elm.type === 'radio') {
+        elm.checked = ini[elm.name] === elm.value;
+      } else {
+        elm.value = ini[elm.id] || settings.insteadOfEmpty[elm.id] || (
+          elm.type === 'number' ? 0 : ''
+        );
+      }
+    }
+  },
+  setupEventListeners() {
+    for (const elm of $bidingForms) {
+      elm.addEventListener('change', saveBindingValues);
+      elm.addEventListener('input', saveBindingValuesDelay);
+    }
+
+    // common events
+    addEventListener('click', e => {
+      if (!e?.target.classList) return;
+      if (
+        e.target.classList.contains('js-history-back') ||
+        e.target.classList.contains('dlg')
+      ) {
+        history.back();
+        return;
+      }
+      if (e.target.classList.contains('js-submit')) {
+        const f = dlgs[openedDlg.id].onSubmit;
+        f && f();
+        history.back();
+      }
+    });
+  },
+  removeCover() {
+    const cover = byId('cover');
+    if (!cover) return;
+    setTimeout(() => { fadeout(cover); });
+    setTimeout(() => { cover.remove(); }, 500);
+    setTimeout(() => {
+      document.body.classList.add('initialized');
+      initialized = true;
+    }, 500);
+  },
 };
 
 // Save ---------------------
@@ -296,103 +402,6 @@ const saveBindingValuesDelay = () => {
   resetTimer('saveBindingValues', saveBindingValues, 3000);
 };
 
-// Import / Export ----------
-const importSetting = async text => {
-  try {
-    const obj = JSON.parse(text);
-    Object.assign(settings.getIni(), obj.ini);
-    await saveIni();
-    location.reload();
-  } catch (e) {
-    alert(e.message);
-  }
-};
-const importSettingOnChange = e => {
-  try {
-    if (!e.target.files[0]) return;
-    const reader = new FileReader();
-    reader.onload = () => { importSetting(reader.result); };
-    reader.readAsText(e.target.files[0]);
-  } catch (error) {
-    alert(error.message);
-  }
-};
-const exportSetting = async () => {
-  const data = { ini: settings.getIni() };
-  const href = 'data:application/octet-stream,' + encodeURIComponent(JSON.stringify(data));
-  const link = byId('exportSettingLink');
-  link.setAttribute('href', href);
-  link.click();
-};
-
-// Others ------------------
-const setupContents = () => {
-  for (const caption of allByClass('i18n')) {
-    caption.textContent = getMessage(caption.textContent);
-  }
-  const ini = settings.getIni();
-  for (const elm of $bidingForms) {
-    if (elm.type === 'checkbox') {
-      elm.checked = !!ini[elm.id];
-    } else if (elm.type === 'radio') {
-      elm.checked = ini[elm.name] === elm.value;
-    } else {
-      elm.value = ini[elm.id] || settings.insteadOfEmpty[elm.id] || (
-        elm.type === 'number' ? 0 : ''
-      );
-    }
-  }
-  for (const elm of allByClass('color-text-input')) {
-    elm.setAttribute('placeholder', settings.insteadOfEmpty[elm.id]);
-    onChangeColorText({ target: elm });
-  }
-  setupDenylistSummary();
-};
-
-const setupEventListeners = () => {
-  for (const elm of $bidingForms) {
-    elm.addEventListener('change', saveBindingValues);
-    elm.addEventListener('input', saveBindingValuesDelay);
-  }
-  for (const elm of allByClass('color-text-input')) {
-    elm.addEventListener('input', onChangeColorText);
-    colorPreview(elm).addEventListener('click', e => {
-      changeState({dlg: 'colorDlg', targetId: dataTargetId(e)});
-    });
-  }
-  byId('importSetting')?.addEventListener('change', importSettingOnChange);
-  byId('exportSetting')?.addEventListener('click', exportSetting);
-  byId('denylistEdit')?.addEventListener('click', () => { changeState({dlg: 'denylistDlg'}); });
-
-  // common events
-  addEventListener('click', e => {
-    if (!e?.target.classList) return;
-    if (
-      e.target.classList.contains('js-history-back') ||
-      e.target.classList.contains('dlg')
-    ) {
-      history.back();
-      return;
-    }
-    if (e.target.classList.contains('js-submit')) {
-      const f = dlgs[openedDlg.id].onSubmit;
-      f && f();
-      history.back();
-    }
-  });
-};
-
-const removeCover = () => {
-  const cover = byId('cover');
-  if (!cover) return;
-  setTimeout(() => { fadeout(cover); });
-  setTimeout(() => { cover.remove(); }, 500);
-  setTimeout(() => {
-    document.body.classList.add('initialized');
-    initialized = true;
-  }, 500);
-};
-
 const initialize = async (mySettings) => {
   Object.assign(settings, mySettings);
   const savedData = await storageValue(settings.storageKey);
@@ -400,10 +409,14 @@ const initialize = async (mySettings) => {
     Object.assign(settings.getIni(), savedData)
   }
   document.documentElement.lang = await browser.i18n.getUILanguage();
-  setupContents();
-  setupEventListeners();
+  for (const d of Object.values(dlgs)) {
+    d.init && d.init();
+  }
+  for (const c of Object.values(comp)) {
+    c.init && c.init();
+  }
   onPopState(history);
   await settings.onInitialize();
-  removeCover();
+  comp.common.removeCover();
 };
 
