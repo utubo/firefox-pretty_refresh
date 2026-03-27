@@ -17,7 +17,7 @@ const CSS_TEMPLATE = `
 `;
 const SHAPES = {
   fg: [
-    { name: 'default', svg: '<path stroke="{fg}" fill="none" stroke-linecap="round" d="M15 14.5a4 4 0 1 1 1-2m-1.5-1l1.5 1.5 1.5-1.5"/>' },
+    { name: 'default', svg: '<path stroke="{fg}" fill="none" stroke-linecap="round" d="M15 14.7a4 4 0 1 1 1-2m-1.5-1l1.5 1.5 1.5-1.5"/>' },
     { name: 'plus', svg: '<path stroke="{fg}" fill="none" d="M12 8v8m-4-4h8"/>' },
     { name: 'cross', svg: '<path stroke="{fg}" fill="none" d="M9 9l6 6m0-6l-6 6"/>' },
     { name: 'heart', svg: '<path stroke="{fg}" fill="none" d="M12 16c0 0 0 0 3-2.5s-1-6-3-2c-2-4-6-0.5-3 2c3 2.5 3 2.5 3 2.5z"/>' },
