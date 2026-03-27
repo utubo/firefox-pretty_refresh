@@ -442,7 +442,7 @@ input[type="checkbox"] {
     --checked-fg: #15141a;
     --checkbox-fg: #8f8f9d;
     --checkbox-bg: #3a3944;
-    --button: #3a3944;
+    --button: #52525e;
     --red: #ff9aa2;
   }
   .dlg {
