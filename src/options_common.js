@@ -157,7 +157,7 @@ dlgs.colorDlg = {
     const a = Number(byId('sliderA').value) || 0;
     const t = byId(dlgs.colorDlg.targetId);
     t.value = dlgs.colorDlg.rgb + (a !== 255 ? dlgs.colorDlg.hex(a) : '');
-    onInputText({ target: t });
+    dlgs.colorDlg.onInputText({ target: t });
   },
   onInputText(e) {
     const id = e.target.id;
