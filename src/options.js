@@ -2,6 +2,7 @@
 
 // const -------------
 const CSS_TEMPLATE = `
+  all: initial;
   background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">{bgshape}{fgshape}</svg>');
   filter: drop-shadow(0 0 5px {shcolor});
   background-size: 48px 48px;
