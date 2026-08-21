@@ -20,6 +20,7 @@ const SHAPES = {
     { name: 'umbrella', svg: '<g fill="{fg}" transform="rotate(-30 12 12) translate(7 7) scale(0.4)"><path d="M1.5 15c-4-18 25-18 21 0q-3.5-2-7 0-3.5-2-7 0-3.5-2-7 0"/><circle cx="12" cy="1" r="1"/><path d="M11 13v7q0 4 4 4 4 0 4-4h-2q0 2-2 2-2 0-2-2v-7"/></g>' },
     { name: 'spiral', svg: '<path stroke="{fg}" fill="none" d="M12 12 c1.8 0 1.8 2.16 0 2.4 c-3 0-3-4.2 0-4.44 c4.56-0.6 5.04 6.6 0 6.72 c-6-0.24-6-8.4 0-8.88 c3.6-0.24 6 2.4 5.76 6 "/>' },
     { name: 'face', svg: '<path stroke="{fg}" fill="none" d="M 9 13q1.5 2 3 0q1.5 2 3 0m2-3v2m-10 0v-2"/>' },
+    { name: 'fish', svg: '<path fill="{fg}" d="M2 11.7l-1-0.7q8-4 19 1l3-2q-1 2.5 0 5l-3-2q-8 4-18.9-0.8z"/>' },
     { name: 'empty', svg: '' },
   ],
   bg: [
@@ -33,7 +34,6 @@ const SHAPES = {
     { name: 'rabbit', svg: '<path fill="{bg}" d="M2 14q0 5 10 5 10 0 10-5 0-3-3-5c4-12-7-11-5-1.5q-2-0.5-4 0c1-10-9-10-5 1.5q-3 1.5-3 5"/>', y: 4 },
     { name: 'bear', svg: '<path fill="{bg}" d="M2 14q1 5 10 5 9.5 0 10-5 0.5-4-2-6c5-6-7-9 -6-2q-2-0.5-4 0c1-7-11-4-6 2q-2.5 2-2 6"/>', y: 4 },
     { name: 'umbrella', svg: '<g fill="{bg}" transform="rotate(-30 12 12) translate(0 3.5)"><path d="M1.5 15c-4-18 25-18 21 0q-3.5-2-7 0-3.5-2-7 0-3.5-2-7 0"/><circle cx="12" cy="1" r="1"/><path d="M11 11.5v7q0 4 4 4 4 0 4-4h-2q0 2-2 2-2 0-2-2v-7"/></g>', y: -2 },
-    { name: 'fish', svg: '<path fill="{bg}" d="M2 11.7l-1-0.7q8-4 19 1l3-2q-1 2.5 0 5l-3-2q-8 4-18.9-0.8z"/>' },
     { name: 'empty', svg: '' },
   ],
 };
