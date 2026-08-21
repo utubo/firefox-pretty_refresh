@@ -11,6 +11,15 @@
   "Background": {
     "message": "ベース"
   },
+  "Scale": {
+    "message": "サイズ倍率"
+  },
+  "X": {
+    "message": "横位置"
+  },
+  "Y": {
+    "message": "縦位置"
+  },
   "Shadow": {
     "message": "影"
   },

@@ -2,19 +2,8 @@
 
 // const -------------
 const CSS_TEMPLATE = `
-  all: initial;
   background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">{bgshape}{fgshape}</svg>');
   filter: drop-shadow(0 0 5px {shcolor});
-  background-size: 48px 48px;
-  height: 48px;
-  width: 48px;
-  transition: 300ms;
-  display: inline-block;
-  position: fixed;
-  left: 0;
-  top: 0;
-  overflow: hidden;
-  z-index: 2147483647;
 `;
 const SHAPES = {
   fg: [
@@ -92,7 +81,55 @@ const highlightSelected = () => {
 
 const getShapeCSS = (fgbg) => {
   const s = SHAPES[fgbg].find(v => v.name === PrettyRefresh.ini[`${fgbg}shape`]);
-  return s.svg.replace(`{${fgbg}}`, PrettyRefresh.ini[`${fgbg}color`].replace('#', '%23'));
+  const svg = s.svg.replace(`{${fgbg}}`, PrettyRefresh.ini[`${fgbg}color`].replace('#', '%23'));
+  const transform = PrettyRefresh.ini[`${fgbg}transform`];
+  return transform ? `<g transform="${transform}" transform-origin="center">${svg}</g>` : svg;
+};
+
+// Transform ----------------
+const DECIMAL_EXP = '^-?[0-9]*\\.?[0-9]*';
+const SUPPORT_TS = ['fg'];
+
+const toTsObj = v => {
+  return {
+    scale: v.match('scale\\(([^)]+)')?.[1] || 1,
+    x: v.match('translate\\(([^) ]+)')?.[1] || 0,
+    y: v.match('translate\\([^) ]+ ([^)]+)')?.[1] || 0,
+  };
+};
+
+const toTsString = (s, x, y) => {
+  const ss = Number(s) || 1;
+  const xx = Number(x) || 0;
+  const yy = Number(y) || 0;
+  const scale = ss <= 0 ? '' : `scale(${ss})`;
+  const translate = (!xx && !yy) ? '' : `translate(${xx} ${yy})`;
+  return [scale, translate].join(' ');
+};
+
+const setupTransform = () => {
+  for (const d of allByClass('decimal')) {
+    d.inputmode = 'decimal';
+    d.pattern = DECIMAL_EXP;
+  }
+  for (const fgbg of SUPPORT_TS) {
+    const t = toTsObj(PrettyRefresh.ini[`${fgbg}transform`] || '')
+    byId(`${fgbg}Scale`).value = t.scale;
+    byId(`${fgbg}X`).value = t.x;
+    byId(`${fgbg}Y`).value = t.y;
+  }
+  addEventListener('input', e => {
+    if (!e.target.classList.contains('decimal')) return;
+    for (const fgbg of SUPPORT_TS) {
+      const s = toTsString(
+        byId(`${fgbg}Scale`).value,
+        byId(`${fgbg}X`).value,
+        byId(`${fgbg}Y`).value
+      );
+      PrettyRefresh.ini[`${fgbg}transform`] = s;
+    }
+    saveBindingValues();
+  });
 };
 
 // START HERE ! -------------
@@ -101,6 +138,7 @@ const mySettings = {
   getIni: () => PrettyRefresh.ini,
   onInitialize() {
     setupShapes();
+    setupTransform();
     PrettyRefresh.reload = () => {
       setTimeout(() => { location.reload(); }, 800);
     };

@@ -11,6 +11,15 @@
   "Background": {
     "message": "Background"
   },
+  "Scale": {
+    "message": "Scale"
+  },
+  "X": {
+    "message": "X"
+  },
+  "Y": {
+    "message": "Y"
+  },
   "Shadow": {
     "message": "Shadow"
   },

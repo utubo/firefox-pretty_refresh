@@ -1,21 +1,23 @@
 // constraints -------
 // Default settings
+const CSS_BASE = `
+  all: initial;
+  background-size: 48px 48px;
+  height: 48px;
+  width: 48px;
+  transition: 300ms;
+  display: inline-block;
+  position: fixed;
+  left: 0;
+  top: 0;
+  overflow: hidden;
+  z-index: 2147483647;
+`;
 var PrettyRefresh = {};
 PrettyRefresh.ini = {
   css: `
-    all: initial;
     background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle fill="%52525e" cx="12" cy="12" r="12"/><path stroke="%23f9f9fa" fill="none" stroke-linecap="round" d="M15 14.7a4 4 0 1 1 1-2m-1.5-1l1.5 1.5 1.5-1.5"/></svg>');
     filter: drop-shadow(0 0 5px #0003);
-    background-size: 48px 48px;
-    height: 48px;
-    width: 48px;
-    transition: 300ms;
-    display: inline-block;
-    position: fixed;
-    left: 0;
-    top: 0;
-    overflow: hidden;
-    z-index: 2147483647;
   `,
   bgshape: 'circle',
   bgcolor: '#52525e',
@@ -73,7 +75,7 @@ const createIcon = () => {
 };
 
 const applyCss = () => {
-  icon.style.cssText = PrettyRefresh.ini.css;
+  icon.style.cssText = CSS_BASE + PrettyRefresh.ini.css;
   if (pos === POS_BOTTOM) {
     icon.style.top = '';
     icon.style.bottom = '0';
